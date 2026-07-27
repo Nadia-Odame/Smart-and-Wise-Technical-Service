@@ -1,19 +1,12 @@
 import { Camera, Phone } from "lucide-react";
 import { Layout } from "@/components/Layout";
-import { business } from "@/data/business";
-import heroImage from "@/assets/hero-generator.jpg";
-import repairImage from "@/assets/gallery-repair.jpg";
-import unitImage from "@/assets/gallery-unit.jpg";
-import electricalImage from "@/assets/gallery-electrical.jpg";
-
-const photos = [
-  { src: heroImage, alt: "Technician servicing a diesel generator on site", caption: "On-site servicing" },
-  { src: repairImage, alt: "Generator engine being repaired with a wrench", caption: "Engine repairs" },
-  { src: unitImage, alt: "Silent canopy standby generator installed outside a building", caption: "Installed sets" },
-  { src: electricalImage, alt: "Electrician working on a distribution board", caption: "Electrical works" },
-];
+import { useBusinessSettings } from "@/hooks/useBusinessSettings";
+import { useGalleryPhotos } from "@/hooks/useGalleryPhotos";
 
 const Gallery = () => {
+  const { data: business } = useBusinessSettings();
+  const { data: photos = [] } = useGalleryPhotos();
+
   return (
     <Layout>
       <section className="bg-foreground text-background py-14 sm:py-20">
@@ -30,7 +23,7 @@ const Gallery = () => {
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {photos.map((photo, i) => (
             <figure
-              key={photo.alt}
+              key={photo.id}
               className={`group relative image-reveal border border-border bg-muted ${
                 i === 0 ? "sm:col-span-2 aspect-[16/10]" : "aspect-[4/3]"
               }`}
