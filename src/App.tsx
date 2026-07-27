@@ -22,6 +22,7 @@ const AdminLayout = lazy(() => import("./pages/admin/AdminLayout"));
 const AdminEnquiries = lazy(() => import("./pages/admin/AdminEnquiries"));
 const AdminShop = lazy(() => import("./pages/admin/AdminShop"));
 const AdminProductForm = lazy(() => import("./pages/admin/AdminProductForm"));
+const AdminGallery = lazy(() => import("./pages/admin/AdminGallery"));
 
 const queryClient = new QueryClient();
 
@@ -96,6 +97,14 @@ const App = () => (
                 element={
                   <Suspense fallback={<AdminFallback />}>
                     <AdminProductForm />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="gallery"
+                element={
+                  <Suspense fallback={<AdminFallback />}>
+                    <AdminGallery />
                   </Suspense>
                 }
               />
