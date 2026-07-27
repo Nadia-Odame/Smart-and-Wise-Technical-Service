@@ -3,19 +3,24 @@ import { useSearchParams } from "react-router-dom";
 import { Phone } from "lucide-react";
 import { Layout } from "@/components/Layout";
 import { ProductCard } from "@/components/ProductCard";
-import { products, collections, getCollectionBySlug } from "@/data/products";
-import { business } from "@/data/business";
+import { useProducts } from "@/hooks/useProducts";
+import { useCollections } from "@/hooks/useCollections";
+import { useBusinessSettings } from "@/hooks/useBusinessSettings";
+import { findCollectionBySlug } from "@/lib/products-helpers";
 import { cn } from "@/lib/utils";
 
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const active = searchParams.get("collection") || "all";
+  const { data: products = [] } = useProducts();
+  const { data: collections = [] } = useCollections();
+  const { data: business } = useBusinessSettings();
 
   const list = useMemo(() => {
     if (active === "all") return products;
-    const collection = getCollectionBySlug(active);
+    const collection = findCollectionBySlug(collections, active);
     return collection ? products.filter((p) => p.collection === collection.id) : products;
-  }, [active]);
+  }, [active, products, collections]);
 
   const handleFilter = (slug: string) => {
     const params = new URLSearchParams(searchParams);

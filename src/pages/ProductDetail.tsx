@@ -5,27 +5,29 @@ import { Layout } from "@/components/Layout";
 import { ProductCard } from "@/components/ProductCard";
 import { QuantitySelector } from "@/components/QuantitySelector";
 import { useCart } from "@/hooks/useCart";
+import { useBusinessSettings } from "@/hooks/useBusinessSettings";
+import { useCollections } from "@/hooks/useCollections";
+import { useProducts } from "@/hooks/useProducts";
+import { useProduct } from "@/hooks/useProduct";
 import { toast } from "@/hooks/use-toast";
-import { business } from "@/data/business";
-import {
-  collections,
-  formatPrice,
-  getProductBySlug,
-  getRelatedProducts,
-} from "@/data/products";
+import { formatPrice } from "@/data/products";
+import { findCollectionBySlug, filterRelatedProducts } from "@/lib/products-helpers";
 import NotFound from "./NotFound";
 
 const ProductDetail = () => {
   const { slug } = useParams<{ slug: string }>();
-  const product = slug ? getProductBySlug(slug) : undefined;
+  const { data: product } = useProduct(slug);
+  const { data: business } = useBusinessSettings();
+  const { data: collections = [] } = useCollections();
+  const { data: products = [] } = useProducts();
   const [quantity, setQuantity] = useState(1);
   const [activeImage, setActiveImage] = useState(0);
   const addItem = useCart((s) => s.addItem);
 
   if (!product) return <NotFound />;
 
-  const collection = collections.find((c) => c.id === product.collection);
-  const related = getRelatedProducts(product);
+  const collection = findCollectionBySlug(collections, product.collection);
+  const related = filterRelatedProducts(products, product);
   const isRental = product.collection === "rentals";
 
   const handleAdd = () => {

@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import { Plus } from "lucide-react";
-import { Product, collections, formatPrice } from "@/data/products";
+import { Product, formatPrice } from "@/data/products";
 import { useCart } from "@/hooks/useCart";
+import { useCollections } from "@/hooks/useCollections";
+import { findCollectionBySlug } from "@/lib/products-helpers";
 import { toast } from "@/hooks/use-toast";
 
 interface ProductCardProps {
@@ -11,7 +13,8 @@ interface ProductCardProps {
 
 export const ProductCard = ({ product }: ProductCardProps) => {
   const addItem = useCart((s) => s.addItem);
-  const collection = collections.find((c) => c.id === product.collection);
+  const { data: collections = [] } = useCollections();
+  const collection = findCollectionBySlug(collections, product.collection);
 
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault();

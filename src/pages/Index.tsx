@@ -2,8 +2,10 @@ import { Link } from "react-router-dom";
 import { ArrowRight, CheckCircle2, Clock, MapPin, Phone, Wrench } from "lucide-react";
 import { Layout } from "@/components/Layout";
 import { ProductCard } from "@/components/ProductCard";
-import { business, services } from "@/data/business";
-import { getFeaturedProducts } from "@/data/products";
+import { useBusinessSettings } from "@/hooks/useBusinessSettings";
+import { useServices } from "@/hooks/useServices";
+import { useProducts } from "@/hooks/useProducts";
+import { filterFeaturedProducts } from "@/lib/products-helpers";
 import heroImage from "@/assets/hero-generator.jpg";
 
 const reasons = [
@@ -14,7 +16,10 @@ const reasons = [
 ];
 
 const Index = () => {
-  const featured = getFeaturedProducts();
+  const { data: business } = useBusinessSettings();
+  const { data: services = [] } = useServices();
+  const { data: products = [] } = useProducts();
+  const featured = filterFeaturedProducts(products);
 
   return (
     <Layout>
