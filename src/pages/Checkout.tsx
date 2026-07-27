@@ -4,8 +4,9 @@ import { ArrowLeft, CheckCircle2, Phone, Send } from "lucide-react";
 import { Layout } from "@/components/Layout";
 import { useCart } from "@/hooks/useCart";
 import { formatPrice } from "@/data/products";
-import { business } from "@/data/business";
+import { useBusinessSettings } from "@/hooks/useBusinessSettings";
 import { openWhatsApp, submitToFormspree } from "@/lib/notify";
+import { submitEnquiry } from "@/lib/api/enquiries";
 import { toast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,6 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 
 const Checkout = () => {
   const navigate = useNavigate();
+  const { data: business } = useBusinessSettings();
   const { items, getSubtotal, clearCart } = useCart();
   const [form, setForm] = useState({ name: "", phone: "", location: "", notes: "" });
   const [sent, setSent] = useState(false);
@@ -74,6 +76,19 @@ const Checkout = () => {
       notes: form.notes,
       items: itemLines.join("; "),
       total: formatPrice(subtotal),
+    });
+    void submitEnquiry({
+      type: "order",
+      name: form.name,
+      phone: form.phone,
+      location: form.location || null,
+      notes: form.notes || null,
+      items: items.map((item) => ({
+        name: item.product.name,
+        quantity: item.quantity,
+        lineTotal: item.product.price * item.quantity,
+      })),
+      total: subtotal,
     });
 
     setSent(true);

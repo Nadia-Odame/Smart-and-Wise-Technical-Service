@@ -4,6 +4,7 @@ import { Layout } from "@/components/Layout";
 import { useBusinessSettings } from "@/hooks/useBusinessSettings";
 import { useServices } from "@/hooks/useServices";
 import { openWhatsApp, submitToFormspree } from "@/lib/notify";
+import { submitEnquiry } from "@/lib/api/enquiries";
 import { toast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -56,6 +57,13 @@ const Contact = () => {
       phone: form.phone,
       service: form.service,
       message: form.message,
+    });
+    void submitEnquiry({
+      type: "quote",
+      name: form.name,
+      phone: form.phone,
+      service: form.service,
+      message: form.message || null,
     });
 
     toast({
