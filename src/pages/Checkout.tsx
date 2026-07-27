@@ -5,6 +5,7 @@ import { Layout } from "@/components/Layout";
 import { useCart } from "@/hooks/useCart";
 import { formatPrice } from "@/data/products";
 import { business } from "@/data/business";
+import { openWhatsApp, submitToFormspree } from "@/lib/notify";
 import { toast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -44,6 +45,37 @@ const Checkout = () => {
       });
       return;
     }
+
+    const itemLines = items.map(
+      (item) =>
+        `${item.quantity} × ${item.product.name} (${formatPrice(item.product.price * item.quantity)})`
+    );
+
+    const whatsappMessage = [
+      "New order request from the website",
+      `Name: ${form.name}`,
+      `Phone: ${form.phone}`,
+      form.location ? `Delivery location: ${form.location}` : null,
+      "",
+      "Items:",
+      ...itemLines,
+      `Estimated total: ${formatPrice(subtotal)}`,
+      form.notes ? `Notes: ${form.notes}` : null,
+    ]
+      .filter(Boolean)
+      .join("\n");
+
+    openWhatsApp(business.whatsapp, whatsappMessage);
+    void submitToFormspree({
+      _subject: "New order request — Smart and Wise website",
+      name: form.name,
+      phone: form.phone,
+      location: form.location,
+      notes: form.notes,
+      items: itemLines.join("; "),
+      total: formatPrice(subtotal),
+    });
+
     setSent(true);
     clearCart();
     toast({
