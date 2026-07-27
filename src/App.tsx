@@ -20,6 +20,8 @@ import RequireAuth from "./components/admin/RequireAuth";
 const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
 const AdminLayout = lazy(() => import("./pages/admin/AdminLayout"));
 const AdminEnquiries = lazy(() => import("./pages/admin/AdminEnquiries"));
+const AdminShop = lazy(() => import("./pages/admin/AdminShop"));
+const AdminProductForm = lazy(() => import("./pages/admin/AdminProductForm"));
 
 const queryClient = new QueryClient();
 
@@ -70,6 +72,30 @@ const App = () => (
                 element={
                   <Suspense fallback={<AdminFallback />}>
                     <AdminEnquiries />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="shop"
+                element={
+                  <Suspense fallback={<AdminFallback />}>
+                    <AdminShop />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="shop/products/new"
+                element={
+                  <Suspense fallback={<AdminFallback />}>
+                    <AdminProductForm />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="shop/products/:id/edit"
+                element={
+                  <Suspense fallback={<AdminFallback />}>
+                    <AdminProductForm />
                   </Suspense>
                 }
               />
