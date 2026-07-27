@@ -19,6 +19,7 @@ import RequireAuth from "./components/admin/RequireAuth";
 
 const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
 const AdminLayout = lazy(() => import("./pages/admin/AdminLayout"));
+const AdminEnquiries = lazy(() => import("./pages/admin/AdminEnquiries"));
 
 const queryClient = new QueryClient();
 
@@ -64,6 +65,14 @@ const App = () => (
               }
             >
               <Route index element={<Navigate to="/admin/enquiries" replace />} />
+              <Route
+                path="enquiries"
+                element={
+                  <Suspense fallback={<AdminFallback />}>
+                    <AdminEnquiries />
+                  </Suspense>
+                }
+              />
             </Route>
           </Route>
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
