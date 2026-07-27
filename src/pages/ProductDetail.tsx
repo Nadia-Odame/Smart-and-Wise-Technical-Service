@@ -116,7 +116,7 @@ const ProductDetail = () => {
             </dl>
 
             <div className="mt-7 flex flex-wrap items-center gap-4">
-              <QuantitySelector value={quantity} onChange={setQuantity} />
+              <QuantitySelector quantity={quantity} onQuantityChange={setQuantity} />
               <button
                 onClick={handleAdd}
                 className="flex-1 min-w-[200px] inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-6 py-4 text-sm font-bold tracking-[0.15em] uppercase hover:brightness-95 transition"
