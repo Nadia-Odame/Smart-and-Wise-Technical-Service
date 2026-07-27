@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Clock, MapPin, Phone, Send } from "lucide-react";
 import { Layout } from "@/components/Layout";
-import { business, services } from "@/data/business";
+import { useBusinessSettings } from "@/hooks/useBusinessSettings";
+import { useServices } from "@/hooks/useServices";
 import { openWhatsApp, submitToFormspree } from "@/lib/notify";
 import { toast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
@@ -15,15 +16,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const serviceOptions = [
-  ...services.map((s) => s.name),
-  "Generator Purchase",
-  "Generator Rental",
-  "Parts & Accessories",
-  "Something else",
-];
-
 const Contact = () => {
+  const { data: business } = useBusinessSettings();
+  const { data: services = [] } = useServices();
+  const serviceOptions = [
+    ...services.map((s) => s.name),
+    "Generator Purchase",
+    "Generator Rental",
+    "Parts & Accessories",
+    "Something else",
+  ];
   const [form, setForm] = useState({ name: "", phone: "", service: "", message: "" });
 
   const handleSubmit = (e: React.FormEvent) => {

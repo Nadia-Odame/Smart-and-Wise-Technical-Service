@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
 import { Clock, MapPin, Phone } from "lucide-react";
-import { services } from "@/data/business";
 import { useBusinessSettings } from "@/hooks/useBusinessSettings";
+import { useServices } from "@/hooks/useServices";
 
 export const Footer = () => {
   const { data: business } = useBusinessSettings();
+  const { data: services = [] } = useServices();
 
   return (
     <footer className="bg-foreground text-background mt-auto">

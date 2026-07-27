@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { CheckCircle2, Phone } from "lucide-react";
 import { Layout } from "@/components/Layout";
-import { business, services } from "@/data/business";
+import { useBusinessSettings } from "@/hooks/useBusinessSettings";
+import { useServices } from "@/hooks/useServices";
 import repairImage from "@/assets/gallery-repair.jpg";
 import electricalImage from "@/assets/gallery-electrical.jpg";
 import unitImage from "@/assets/gallery-unit.jpg";
@@ -15,6 +16,9 @@ const serviceImages: Record<string, string> = {
 };
 
 const Services = () => {
+  const { data: business } = useBusinessSettings();
+  const { data: services = [] } = useServices();
+
   return (
     <Layout>
       <section className="bg-foreground text-background py-14 sm:py-20">
@@ -38,7 +42,7 @@ const Services = () => {
             <div className={i % 2 === 1 ? "lg:order-2" : ""}>
               <div className="image-reveal border border-border aspect-[4/3]">
                 <img
-                  src={serviceImages[service.id]}
+                  src={serviceImages[service.id] ?? heroImage}
                   alt={service.name}
                   loading="lazy"
                   className="w-full h-full object-cover"

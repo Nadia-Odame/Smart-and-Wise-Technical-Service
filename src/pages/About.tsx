@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { CheckCircle2, Phone } from "lucide-react";
 import { Layout } from "@/components/Layout";
-import { business } from "@/data/business";
+import { useBusinessSettings } from "@/hooks/useBusinessSettings";
 import heroImage from "@/assets/hero-generator.jpg";
 import repairImage from "@/assets/gallery-repair.jpg";
 
@@ -21,6 +21,8 @@ const values = [
 ];
 
 const About = () => {
+  const { data: business } = useBusinessSettings();
+
   return (
     <Layout>
       <section className="bg-foreground text-background py-14 sm:py-20">
