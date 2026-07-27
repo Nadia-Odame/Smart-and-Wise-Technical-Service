@@ -2,7 +2,7 @@ import { Link, NavLink as RouterNavLink } from "react-router-dom";
 import { Menu, Phone, X } from "lucide-react";
 import { useState } from "react";
 import { CartIcon } from "@/components/CartIcon";
-import { business } from "@/data/business";
+import { useBusinessSettings } from "@/hooks/useBusinessSettings";
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -16,6 +16,7 @@ const navItems = [
 
 export const Header = () => {
   const [open, setOpen] = useState(false);
+  const { data: business } = useBusinessSettings();
 
   return (
     <header className="sticky top-0 z-50 bg-background/95 backdrop-blur border-b border-border">

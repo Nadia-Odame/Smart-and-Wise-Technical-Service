@@ -1,8 +1,11 @@
 import { Link } from "react-router-dom";
 import { Clock, MapPin, Phone } from "lucide-react";
-import { business, services } from "@/data/business";
+import { services } from "@/data/business";
+import { useBusinessSettings } from "@/hooks/useBusinessSettings";
 
 export const Footer = () => {
+  const { data: business } = useBusinessSettings();
+
   return (
     <footer className="bg-foreground text-background mt-auto">
       <div className="h-1 hazard-stripe" aria-hidden="true" />
