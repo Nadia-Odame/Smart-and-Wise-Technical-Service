@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Clock, MapPin, Phone, Send } from "lucide-react";
 import { Layout } from "@/components/Layout";
 import { business, services } from "@/data/business";
+import { openWhatsApp, submitToFormspree } from "@/lib/notify";
 import { toast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -35,6 +36,26 @@ const Contact = () => {
       });
       return;
     }
+
+    const whatsappMessage = [
+      "New quote request from the website",
+      `Name: ${form.name}`,
+      `Phone: ${form.phone}`,
+      `Service: ${form.service}`,
+      form.message ? `Message: ${form.message}` : null,
+    ]
+      .filter(Boolean)
+      .join("\n");
+
+    openWhatsApp(business.whatsapp, whatsappMessage);
+    void submitToFormspree({
+      _subject: "New quote request — Smart and Wise website",
+      name: form.name,
+      phone: form.phone,
+      service: form.service,
+      message: form.message,
+    });
+
     toast({
       title: "Thank you, we have your request",
       description: `We will call you on ${form.phone}. For anything urgent, call ${business.phone}.`,
