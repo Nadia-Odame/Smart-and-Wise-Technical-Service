@@ -1,242 +1,121 @@
-import { Link } from "react-router-dom";
-import { Heart, Menu, X } from "lucide-react";
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { useWishlist } from "@/hooks/useWishlist";
+import { Link, NavLink as RouterNavLink } from "react-router-dom";
+import { Menu, Phone, X } from "lucide-react";
+import { useState } from "react";
 import { CartIcon } from "@/components/CartIcon";
-import { collections } from "@/data/products";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { business } from "@/data/business";
 import { cn } from "@/lib/utils";
 
-export const Header = () => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const { items } = useWishlist();
+const navItems = [
+  { to: "/", label: "Home" },
+  { to: "/services", label: "Services" },
+  { to: "/shop", label: "Shop & Rentals" },
+  { to: "/gallery", label: "Gallery" },
+  { to: "/about", label: "About" },
+  { to: "/contact", label: "Contact" },
+];
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+export const Header = () => {
+  const [open, setOpen] = useState(false);
 
   return (
-    <header
-      className={cn(
-        "sticky top-0 z-50 transition-all duration-500",
-        scrolled
-          ? "bg-background/95 backdrop-blur-md border-b border-border shadow-sm"
-          : "bg-background/80 backdrop-blur-sm border-b border-transparent"
-      )}
-    >
-      <nav className="container-full">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo */}
-          <Link
-            to="/"
-            className="font-serif text-2xl md:text-3xl tracking-tight text-foreground hover:text-primary transition-colors duration-300"
+    <header className="sticky top-0 z-50 bg-background/95 backdrop-blur border-b border-border">
+      {/* Phone bar — always visible */}
+      <div className="bg-foreground text-background">
+        <div className="container-full flex items-center justify-between gap-3 py-2 text-xs sm:text-sm">
+          <span className="hidden sm:inline text-background/70">{business.hours}</span>
+          <a
+            href={business.phoneHref}
+            className="flex items-center gap-2 font-semibold text-primary hover:underline"
           >
-            Maison
+            <Phone className="w-4 h-4" aria-hidden="true" />
+            {business.phone}
+          </a>
+        </div>
+      </div>
+
+      <div className="h-1 hazard-stripe" aria-hidden="true" />
+
+      <nav className="container-full" aria-label="Main">
+        <div className="flex items-center justify-between h-16">
+          <Link to="/" className="leading-none">
+            <span className="block font-serif text-xl sm:text-2xl font-bold tracking-tight">
+              Smart <span className="text-primary">&amp;</span> Wise
+            </span>
+            <span className="block text-[9px] sm:text-[10px] font-semibold tracking-[0.28em] uppercase text-muted-foreground">
+              Technical Service
+            </span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
-            <NavigationMenu>
-              <NavigationMenuList>
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className="bg-transparent text-xs font-medium tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground">
-                    Collections
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <ul className="grid w-[400px] gap-1 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                      {collections.map((collection) => (
-                        <li key={collection.id}>
-                          <NavigationMenuLink asChild>
-                            <Link
-                              to={`/products?collection=${collection.slug}`}
-                              className={cn(
-                                "block select-none space-y-1 rounded-sm p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                              )}
-                            >
-                              <div className="text-sm font-medium leading-none">
-                                {collection.name}
-                              </div>
-                              <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                                {collection.description}
-                              </p>
-                            </Link>
-                          </NavigationMenuLink>
-                        </li>
-                      ))}
-                    </ul>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
-
-            <Link
-              to="/products"
-              className="text-xs font-medium tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline"
-            >
-              Shop All
-            </Link>
-
-            <Link
-              to="/about"
-              className="text-xs font-medium tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline"
-            >
-              About
-            </Link>
+          <div className="hidden lg:flex items-center gap-7">
+            {navItems.map((item) => (
+              <RouterNavLink
+                key={item.to}
+                to={item.to}
+                end={item.to === "/"}
+                className={({ isActive }) =>
+                  cn(
+                    "text-xs font-bold tracking-[0.15em] uppercase transition-colors link-underline",
+                    isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                  )
+                }
+              >
+                {item.label}
+              </RouterNavLink>
+            ))}
           </div>
 
-          {/* Right side actions */}
-          <div className="flex items-center gap-2">
-            {/* Wishlist Icon with Tooltip */}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button className="relative p-2 hover:bg-accent transition-colors duration-300 group">
-                  <Heart className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" />
-                  <AnimatePresence>
-                    {items.length > 0 && (
-                      <motion.span
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        exit={{ scale: 0 }}
-                        className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-primary text-primary-foreground text-[10px] font-semibold rounded-full flex items-center justify-center"
-                      >
-                        {items.length > 9 ? "9+" : items.length}
-                      </motion.span>
-                    )}
-                  </AnimatePresence>
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom" className="max-w-xs">
-                {items.length === 0 ? (
-                  <p className="text-sm">Your wishlist is empty</p>
-                ) : (
-                  <div className="space-y-2">
-                    <p className="text-sm font-medium">{items.length} saved {items.length === 1 ? 'item' : 'items'}</p>
-                    <div className="space-y-1">
-                      {items.slice(0, 3).map((item) => (
-                        <p key={item.id} className="text-xs text-muted-foreground truncate">
-                          {item.name}
-                        </p>
-                      ))}
-                      {items.length > 3 && (
-                        <p className="text-xs text-muted-foreground">+{items.length - 3} more</p>
-                      )}
-                    </div>
-                  </div>
-                )}
-              </TooltipContent>
-            </Tooltip>
-
-            {/* Cart Icon */}
-            <CartIcon />
-
-            {/* Mobile menu button */}
-            <button
-              className="md:hidden p-2 hover:bg-accent transition-colors duration-300"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          <div className="flex items-center gap-1">
+            <a
+              href={business.phoneHref}
+              className="hidden sm:inline-flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2.5 text-xs font-bold tracking-[0.15em] uppercase hover:brightness-95 transition"
             >
-              <AnimatePresence mode="wait">
-                {mobileMenuOpen ? (
-                  <motion.div
-                    key="close"
-                    initial={{ rotate: -90, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: 90, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <X className="w-5 h-5" />
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="menu"
-                    initial={{ rotate: 90, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: -90, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <Menu className="w-5 h-5" />
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              <Phone className="w-4 h-4" aria-hidden="true" />
+              Call Now
+            </a>
+            <CartIcon />
+            <button
+              className="lg:hidden p-2"
+              onClick={() => setOpen(!open)}
+              aria-label={open ? "Close menu" : "Open menu"}
+              aria-expanded={open}
+            >
+              {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Menu */}
-        <AnimatePresence>
-          {mobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] as const }}
-              className="md:hidden border-t border-border overflow-hidden"
+        {open && (
+          <div className="lg:hidden border-t border-border py-3">
+            <ul className="flex flex-col">
+              {navItems.map((item) => (
+                <li key={item.to}>
+                  <RouterNavLink
+                    to={item.to}
+                    end={item.to === "/"}
+                    onClick={() => setOpen(false)}
+                    className={({ isActive }) =>
+                      cn(
+                        "block py-3 text-sm font-bold tracking-[0.12em] uppercase border-l-4 pl-4 transition-colors",
+                        isActive
+                          ? "border-primary text-foreground"
+                          : "border-transparent text-muted-foreground"
+                      )
+                    }
+                  >
+                    {item.label}
+                  </RouterNavLink>
+                </li>
+              ))}
+            </ul>
+            <a
+              href={business.phoneHref}
+              className="mt-3 flex items-center justify-center gap-2 bg-primary text-primary-foreground px-4 py-3 text-sm font-bold tracking-[0.15em] uppercase"
             >
-              <div className="py-8 space-y-6">
-                <div className="space-y-1">
-                  <p className="text-[10px] font-semibold tracking-[0.3em] uppercase text-muted-foreground/50 px-2 mb-3">
-                    Collections
-                  </p>
-                  {collections.slice(0, 6).map((collection, i) => (
-                    <motion.div
-                      key={collection.id}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: i * 0.05 }}
-                    >
-                      <Link
-                        to={`/products?collection=${collection.slug}`}
-                        className="block px-2 py-2.5 text-sm hover:bg-accent transition-colors duration-300"
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        {collection.name}
-                      </Link>
-                    </motion.div>
-                  ))}
-                </div>
-                <div className="pt-6 border-t border-border space-y-1">
-                  {[
-                    { to: "/products", label: "Shop All" },
-                    { to: "/about", label: "About" },
-                    { to: "/cart", label: "Shopping Bag" },
-                  ].map((link, i) => (
-                    <motion.div
-                      key={link.to}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.3 + i * 0.05 }}
-                    >
-                      <Link
-                        to={link.to}
-                        className="block px-2 py-2.5 text-sm font-medium hover:bg-accent transition-colors duration-300"
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        {link.label}
-                      </Link>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+              <Phone className="w-4 h-4" aria-hidden="true" />
+              Call {business.phone}
+            </a>
+          </div>
+        )}
       </nav>
     </header>
   );
