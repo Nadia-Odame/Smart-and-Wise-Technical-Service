@@ -15,8 +15,10 @@ import Contact from "./pages/Contact";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import NotFound from "./pages/NotFound";
+import RequireAuth from "./components/admin/RequireAuth";
 
 const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
+const AdminLayout = lazy(() => import("./pages/admin/AdminLayout"));
 
 const queryClient = new QueryClient();
 
@@ -52,6 +54,18 @@ const App = () => (
               </Suspense>
             }
           />
+          <Route element={<RequireAuth />}>
+            <Route
+              path="/admin"
+              element={
+                <Suspense fallback={<AdminFallback />}>
+                  <AdminLayout />
+                </Suspense>
+              }
+            >
+              <Route index element={<Navigate to="/admin/enquiries" replace />} />
+            </Route>
+          </Route>
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
