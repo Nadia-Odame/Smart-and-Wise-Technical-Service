@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
-@tailwind utilities;
 @tailwind components;
+@tailwind utilities;
 
 /* Smart and Wise Technical Service — bold industrial design system
    Safety yellow + charcoal, rugged but professional.
