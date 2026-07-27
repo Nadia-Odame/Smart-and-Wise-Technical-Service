@@ -1,393 +1,180 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import { ArrowRight, AlertCircle, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Phone, Send } from "lucide-react";
 import { Layout } from "@/components/Layout";
 import { useCart } from "@/hooks/useCart";
-import { Button } from "@/components/ui/button";
+import { formatPrice } from "@/data/products";
+import { business } from "@/data/business";
+import { toast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/hooks/use-toast";
 
 const Checkout = () => {
   const navigate = useNavigate();
-  const { toast } = useToast();
   const { items, getSubtotal, clearCart } = useCart();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    address: "",
-    city: "",
-    postalCode: "",
-    country: "",
-    notes: "",
-  });
-
+  const [form, setForm] = useState({ name: "", phone: "", location: "", notes: "" });
+  const [sent, setSent] = useState(false);
   const subtotal = getSubtotal();
-  const shipping = subtotal > 500 ? 0 : 25;
-  const total = subtotal + shipping;
 
-  if (items.length === 0) {
+  if (items.length === 0 && !sent) {
     return (
       <Layout>
-        <div className="container-narrow py-28 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+        <div className="container-narrow py-20 text-center">
+          <h1 className="font-serif text-3xl font-bold">Nothing to send yet</h1>
+          <p className="mt-3 text-muted-foreground">Add something to your order list first.</p>
+          <Link
+            to="/shop"
+            className="mt-6 inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3.5 text-xs font-bold tracking-[0.15em] uppercase"
           >
-            <h1 className="font-serif text-4xl mb-4">No Items to Checkout</h1>
-            <p className="text-muted-foreground mb-8">
-              Your bag is empty. Add some items before checking out.
-            </p>
-            <Button
-              asChild
-              size="lg"
-              className="rounded-none px-10 py-6 text-sm tracking-[0.15em] uppercase btn-premium"
-            >
-              <Link to="/products">
-                Start Shopping
-                <ArrowRight className="ml-3 w-4 h-4" />
-              </Link>
-            </Button>
-          </motion.div>
+            Go to shop
+          </Link>
         </div>
       </Layout>
     );
   }
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    toast({
-      title: "Order Request Submitted",
-      description:
-        "Thank you! We'll contact you shortly to complete your order.",
-    });
-
+    if (!form.name || !form.phone) {
+      toast({
+        title: "Name and phone are needed",
+        description: "We need a number to call you back on.",
+        variant: "destructive",
+      });
+      return;
+    }
+    setSent(true);
     clearCart();
-    setIsSubmitting(false);
-    navigate("/");
+    toast({
+      title: "Request received",
+      description: `We will call you on ${form.phone} to confirm.`,
+    });
   };
+
+  if (sent) {
+    return (
+      <Layout>
+        <div className="container-narrow py-20 text-center">
+          <CheckCircle2 className="w-14 h-14 mx-auto text-primary" aria-hidden="true" />
+          <h1 className="mt-6 font-serif text-3xl sm:text-4xl font-bold">Request sent</h1>
+          <p className="mt-3 text-muted-foreground max-w-md mx-auto">
+            Thank you, {form.name}. We will call you on {form.phone} to confirm the items, price
+            and delivery. If it is urgent, call us directly.
+          </p>
+          <div className="mt-7 flex flex-col sm:flex-row gap-3 justify-center">
+            <a
+              href={business.phoneHref}
+              className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-6 py-3.5 text-xs font-bold tracking-[0.15em] uppercase"
+            >
+              <Phone className="w-4 h-4" aria-hidden="true" />
+              {business.phone}
+            </a>
+            <button
+              onClick={() => navigate("/")}
+              className="inline-flex items-center justify-center gap-2 border-2 border-foreground px-6 py-3.5 text-xs font-bold tracking-[0.15em] uppercase hover:bg-foreground hover:text-background transition"
+            >
+              Back to home
+            </button>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
-      {/* Breadcrumb */}
-      <div className="container-full py-6 border-b border-border">
-        <div className="flex items-center gap-3 text-sm text-muted-foreground">
-          <Link to="/cart" className="hover:text-foreground transition-colors">
-            Your Bag
-          </Link>
-          <span className="text-border">/</span>
-          <span className="text-foreground">Checkout</span>
-        </div>
-      </div>
+      <div className="container-full py-12 sm:py-16">
+        <Link
+          to="/cart"
+          className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground"
+        >
+          <ArrowLeft className="w-4 h-4" aria-hidden="true" />
+          Back to order list
+        </Link>
 
-      {/* Coming Soon Banner */}
-      <div className="bg-primary/5 border-b border-primary/10">
-        <div className="container-full py-4">
-          <div className="flex items-center gap-3 text-sm">
-            <AlertCircle className="w-5 h-5 text-primary" />
-            <p>
-              <span className="font-medium">Online checkout coming soon.</span>{" "}
-              <span className="text-muted-foreground">
-                Please submit your order request below and we'll contact you to
-                complete your purchase.
-              </span>
+        <h1 className="mt-6 font-serif text-3xl sm:text-5xl font-bold">Send Your Request</h1>
+        <p className="mt-3 text-muted-foreground max-w-xl">
+          No payment is taken online. We call you back to confirm everything first.
+        </p>
+
+        <div className="mt-8 grid gap-8 lg:grid-cols-3">
+          <form onSubmit={handleSubmit} className="lg:col-span-2 border border-border bg-card p-6 space-y-5">
+            <div className="space-y-2">
+              <Label htmlFor="co-name">Your name *</Label>
+              <Input
+                id="co-name"
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                className="rounded-none h-12"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="co-phone">Phone number *</Label>
+              <Input
+                id="co-phone"
+                type="tel"
+                value={form.phone}
+                onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                placeholder="e.g. 024 000 0000"
+                className="rounded-none h-12"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="co-location">Delivery location</Label>
+              <Input
+                id="co-location"
+                value={form.location}
+                onChange={(e) => setForm({ ...form, location: e.target.value })}
+                placeholder="Town or landmark"
+                className="rounded-none h-12"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="co-notes">Notes</Label>
+              <Textarea
+                id="co-notes"
+                value={form.notes}
+                onChange={(e) => setForm({ ...form, notes: e.target.value })}
+                placeholder="Rental dates, installation needed, or anything else."
+                rows={4}
+                className="rounded-none"
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="w-full inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-6 py-4 text-sm font-bold tracking-[0.15em] uppercase hover:brightness-95 transition"
+            >
+              <Send className="w-4 h-4" aria-hidden="true" />
+              Send request
+            </button>
+          </form>
+
+          <aside className="border border-border bg-card p-6 h-fit border-t-4 border-t-primary">
+            <h2 className="font-serif text-2xl font-bold">Your items</h2>
+            <ul className="mt-4 space-y-3">
+              {items.map((item) => (
+                <li key={item.product.id} className="flex justify-between gap-3 text-sm">
+                  <span className="text-muted-foreground">
+                    {item.quantity} × {item.product.name}
+                  </span>
+                  <span className="font-semibold whitespace-nowrap">
+                    {formatPrice(item.product.price * item.quantity)}
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-4 pt-4 border-t border-border flex justify-between font-serif text-xl font-bold">
+              <span>Estimated total</span>
+              <span>{formatPrice(subtotal)}</span>
+            </div>
+            <p className="mt-3 text-xs text-muted-foreground">
+              Final price confirmed by phone.
             </p>
-          </div>
+          </aside>
         </div>
       </div>
-
-      <section className="py-10 md:py-16">
-        <div className="container-full">
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="font-serif text-4xl md:text-5xl mb-12"
-          >
-            Checkout
-          </motion.h1>
-
-          <div className="grid lg:grid-cols-12 gap-12 lg:gap-16">
-            {/* Form */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="lg:col-span-7"
-            >
-              <form onSubmit={handleSubmit} className="space-y-8">
-                {/* Contact Information */}
-                <div>
-                  <h2 className="font-serif text-xl mb-6">
-                    Contact Information
-                  </h2>
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div>
-                      <label
-                        htmlFor="firstName"
-                        className="block text-xs font-semibold tracking-[0.1em] uppercase text-muted-foreground mb-2"
-                      >
-                        First Name *
-                      </label>
-                      <Input
-                        id="firstName"
-                        name="firstName"
-                        value={formData.firstName}
-                        onChange={handleInputChange}
-                        required
-                        className="rounded-none h-12"
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="lastName"
-                        className="block text-xs font-semibold tracking-[0.1em] uppercase text-muted-foreground mb-2"
-                      >
-                        Last Name *
-                      </label>
-                      <Input
-                        id="lastName"
-                        name="lastName"
-                        value={formData.lastName}
-                        onChange={handleInputChange}
-                        required
-                        className="rounded-none h-12"
-                      />
-                    </div>
-                  </div>
-                  <div className="grid sm:grid-cols-2 gap-4 mt-4">
-                    <div>
-                      <label
-                        htmlFor="email"
-                        className="block text-xs font-semibold tracking-[0.1em] uppercase text-muted-foreground mb-2"
-                      >
-                        Email *
-                      </label>
-                      <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        required
-                        className="rounded-none h-12"
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="phone"
-                        className="block text-xs font-semibold tracking-[0.1em] uppercase text-muted-foreground mb-2"
-                      >
-                        Phone
-                      </label>
-                      <Input
-                        id="phone"
-                        name="phone"
-                        type="tel"
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                        className="rounded-none h-12"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Shipping Address */}
-                <div>
-                  <h2 className="font-serif text-xl mb-6">Shipping Address</h2>
-                  <div className="space-y-4">
-                    <div>
-                      <label
-                        htmlFor="address"
-                        className="block text-xs font-semibold tracking-[0.1em] uppercase text-muted-foreground mb-2"
-                      >
-                        Street Address *
-                      </label>
-                      <Input
-                        id="address"
-                        name="address"
-                        value={formData.address}
-                        onChange={handleInputChange}
-                        required
-                        className="rounded-none h-12"
-                      />
-                    </div>
-                    <div className="grid sm:grid-cols-3 gap-4">
-                      <div className="sm:col-span-1">
-                        <label
-                          htmlFor="city"
-                          className="block text-xs font-semibold tracking-[0.1em] uppercase text-muted-foreground mb-2"
-                        >
-                          City *
-                        </label>
-                        <Input
-                          id="city"
-                          name="city"
-                          value={formData.city}
-                          onChange={handleInputChange}
-                          required
-                          className="rounded-none h-12"
-                        />
-                      </div>
-                      <div>
-                        <label
-                          htmlFor="postalCode"
-                          className="block text-xs font-semibold tracking-[0.1em] uppercase text-muted-foreground mb-2"
-                        >
-                          Postal Code *
-                        </label>
-                        <Input
-                          id="postalCode"
-                          name="postalCode"
-                          value={formData.postalCode}
-                          onChange={handleInputChange}
-                          required
-                          className="rounded-none h-12"
-                        />
-                      </div>
-                      <div>
-                        <label
-                          htmlFor="country"
-                          className="block text-xs font-semibold tracking-[0.1em] uppercase text-muted-foreground mb-2"
-                        >
-                          Country *
-                        </label>
-                        <Input
-                          id="country"
-                          name="country"
-                          value={formData.country}
-                          onChange={handleInputChange}
-                          required
-                          className="rounded-none h-12"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Order Notes */}
-                <div>
-                  <h2 className="font-serif text-xl mb-6">Order Notes</h2>
-                  <Textarea
-                    name="notes"
-                    value={formData.notes}
-                    onChange={handleInputChange}
-                    placeholder="Any special requests or notes for your order..."
-                    className="rounded-none min-h-[120px]"
-                  />
-                </div>
-
-                <Button
-                  type="submit"
-                  size="lg"
-                  disabled={isSubmitting}
-                  className="w-full rounded-none py-6 text-sm tracking-[0.15em] uppercase btn-premium"
-                >
-                  {isSubmitting ? (
-                    "Submitting..."
-                  ) : (
-                    <>
-                      Submit Order Request
-                      <ArrowRight className="ml-3 w-4 h-4" />
-                    </>
-                  )}
-                </Button>
-              </form>
-            </motion.div>
-
-            {/* Order Summary */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="lg:col-span-5"
-            >
-              <div className="bg-linen p-8 lg:sticky lg:top-28">
-                <h2 className="font-serif text-2xl mb-6">Order Summary</h2>
-
-                {/* Items */}
-                <div className="space-y-4 mb-6">
-                  {items.map((item) => (
-                    <div key={item.product.id} className="flex gap-4">
-                      <div className="w-16 h-20 bg-muted/30 overflow-hidden">
-                        <img
-                          src={item.product.images[0]}
-                          alt={item.product.name}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium line-clamp-1">
-                          {item.product.name}
-                        </p>
-                        <p className="text-xs text-muted-foreground mt-0.5">
-                          Qty: {item.quantity}
-                        </p>
-                        <p className="text-sm mt-1">
-                          ${(item.product.price * item.quantity).toLocaleString()}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="border-t border-border pt-4 space-y-3 mb-6">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Subtotal</span>
-                    <span>${subtotal.toLocaleString()}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Shipping</span>
-                    <span>
-                      {shipping === 0 ? "Complimentary" : `$${shipping}`}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="border-t border-border pt-4">
-                  <div className="flex justify-between font-serif text-xl">
-                    <span>Total</span>
-                    <span>${total.toLocaleString()}</span>
-                  </div>
-                </div>
-
-                {/* Contact Info */}
-                <div className="mt-8 pt-6 border-t border-border">
-                  <p className="text-[11px] font-semibold tracking-[0.15em] uppercase text-muted-foreground/60 mb-3">
-                    Questions?
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    Email us at{" "}
-                    <a
-                      href="mailto:hello@maison.com"
-                      className="text-foreground underline"
-                    >
-                      hello@maison.com
-                    </a>
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
     </Layout>
   );
 };
