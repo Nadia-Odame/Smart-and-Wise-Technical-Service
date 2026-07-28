@@ -25,7 +25,6 @@ const AdminProductForm = lazy(() => import("./pages/admin/AdminProductForm"));
 const AdminGallery = lazy(() => import("./pages/admin/AdminGallery"));
 const AdminServices = lazy(() => import("./pages/admin/AdminServices"));
 const AdminSettings = lazy(() => import("./pages/admin/AdminSettings"));
-const AdminSecurity = lazy(() => import("./pages/admin/AdminSecurity"));
 const AdminMfaChallenge = lazy(() => import("./pages/admin/AdminMfaChallenge"));
 
 const queryClient = new QueryClient();
@@ -133,14 +132,6 @@ const App = () => (
                 element={
                   <Suspense fallback={<AdminFallback />}>
                     <AdminSettings />
-                  </Suspense>
-                }
-              />
-              <Route
-                path="security"
-                element={
-                  <Suspense fallback={<AdminFallback />}>
-                    <AdminSecurity />
                   </Suspense>
                 }
               />
