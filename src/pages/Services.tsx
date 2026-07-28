@@ -3,16 +3,16 @@ import { CheckCircle2, Phone } from "lucide-react";
 import { Layout } from "@/components/Layout";
 import { useBusinessSettings } from "@/hooks/useBusinessSettings";
 import { useServices } from "@/hooks/useServices";
-import repairImage from "@/assets/gallery-repair.jpg";
-import electricalImage from "@/assets/gallery-electrical.jpg";
-import unitImage from "@/assets/gallery-unit.jpg";
-import heroImage from "@/assets/hero-generator.jpg";
+import servicingImage from "@/assets/img5.webp";
+import repairImage from "@/assets/img2.webp";
+import electricalImage from "@/assets/img4.webp";
+import overhaulingImage from "@/assets/img8.webp";
 
 const serviceImages: Record<string, string> = {
-  servicing: heroImage,
+  servicing: servicingImage,
   repairs: repairImage,
   electrical: electricalImage,
-  overhauling: unitImage,
+  overhauling: overhaulingImage,
 };
 
 const Services = () => {
@@ -42,7 +42,7 @@ const Services = () => {
             <div className={i % 2 === 1 ? "lg:order-2" : ""}>
               <div className="image-reveal border border-border aspect-[4/3]">
                 <img
-                  src={serviceImages[service.id] ?? heroImage}
+                  src={serviceImages[service.id] ?? servicingImage}
                   alt={service.name}
                   loading="lazy"
                   className="w-full h-full object-cover"
