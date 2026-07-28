@@ -25,7 +25,7 @@ const AdminProductForm = lazy(() => import("./pages/admin/AdminProductForm"));
 const AdminGallery = lazy(() => import("./pages/admin/AdminGallery"));
 const AdminServices = lazy(() => import("./pages/admin/AdminServices"));
 const AdminSettings = lazy(() => import("./pages/admin/AdminSettings"));
-const AdminMfaChallenge = lazy(() => import("./pages/admin/AdminMfaChallenge"));
+const AdminVerifyEmail = lazy(() => import("./pages/admin/AdminVerifyEmail"));
 
 const queryClient = new QueryClient();
 
@@ -62,10 +62,10 @@ const App = () => (
             }
           />
           <Route
-            path="/admin/mfa-challenge"
+            path="/admin/verify-email"
             element={
               <Suspense fallback={<AdminFallback />}>
-                <AdminMfaChallenge />
+                <AdminVerifyEmail />
               </Suspense>
             }
           />
