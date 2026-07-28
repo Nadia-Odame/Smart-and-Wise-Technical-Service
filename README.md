@@ -72,3 +72,23 @@ hours himself.
    `anon` role against `enquiries` — it should return nothing.
 
 Once that's done, log in at `/admin` with the account from step 5.
+
+## Two-factor authentication (TOTP)
+
+Each admin can turn on two-factor authentication for their own login — it's opt-in, not
+forced, and uses a standard authenticator app (Google Authenticator, Authy, etc), via
+Supabase's built-in MFA support (no extra project setup or third-party service needed).
+
+**To enable it:** log in, go to `/admin/security`, click "Enable 2FA", scan the QR code (or
+enter the secret manually) in your authenticator app, and enter the 6-digit code it shows to
+confirm. From then on, logging in requires that code in addition to your password.
+
+**To disable it:** same page, "Disable" button.
+
+**If you lose your authenticator device** and can no longer generate codes, there is no
+self-service recovery — this requires access to the Supabase project (already assumed, since
+you're the one who set it up):
+- Dashboard → Authentication → Users → the affected account → remove its MFA factor, **or**
+- run this in the SQL Editor: `delete from auth.mfa_factors where user_id = '<their user id>';`
+
+Either one drops that login back to password-only.
