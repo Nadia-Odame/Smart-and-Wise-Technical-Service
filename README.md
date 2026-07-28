@@ -73,22 +73,28 @@ hours himself.
 
 Once that's done, log in at `/admin` with the account from step 5.
 
-## Two-factor authentication (TOTP)
+## Two-step login verification (email code)
 
-Each admin can turn on two-factor authentication for their own login — it's opt-in, not
-forced, and uses a standard authenticator app (Google Authenticator, Authy, etc), via
-Supabase's built-in MFA support (no extra project setup or third-party service needed).
+Every admin login requires a second step, always — not opt-in. After the password check
+succeeds, that session is immediately dropped and Supabase emails a 6-digit code to the
+admin's address; only entering that code on the "Enter your code" screen creates the real
+session. No authenticator app needed, no extra service — this uses only Supabase's built-in
+email-OTP support (`signInWithOtp`/`verifyOtp`).
 
-**To enable it:** log in, go to `/admin/security`, click "Enable 2FA", scan the QR code (or
-enter the secret manually) in your authenticator app, and enter the 6-digit code it shows to
-confirm. From then on, logging in requires that code in addition to your password.
+**One-time manual setup required in the Supabase Dashboard:** the emailed code only shows up
+as plain text if the email template actually includes it. Go to Authentication → Email
+Templates → the template used for OTP/magic-link sign-in, and make sure its body includes
+`{{ .Token }}` (e.g. add a line like "Your code is: {{ .Token }}"). By default the template
+may only show a clickable "Log in" link/button with no visible code — skip this step and
+admins won't have a code to type in. (If the template *also* keeps the link/button, clicking
+it completes sign-in too — that's expected, not a bug, since it equally proves access to the
+inbox.)
 
-**To disable it:** same page, "Disable" button.
+**Rate limits:** Supabase limits how many OTP emails it will send to the same address per
+hour (a handful). If you're testing repeatedly and stop receiving codes, that's this limit,
+not a bug — wait a bit and try again. The "Resend code" button on the verify screen has its
+own 30-second cooldown to help avoid hitting it.
 
-**If you lose your authenticator device** and can no longer generate codes, there is no
-self-service recovery — this requires access to the Supabase project (already assumed, since
-you're the one who set it up):
-- Dashboard → Authentication → Users → the affected account → remove its MFA factor, **or**
-- run this in the SQL Editor: `delete from auth.mfa_factors where user_id = '<their user id>';`
-
-Either one drops that login back to password-only.
+**If an admin loses access to their email address**, there is no self-service recovery —
+update the email on their account from the Supabase Dashboard (Authentication → Users) or the
+SQL Editor.
