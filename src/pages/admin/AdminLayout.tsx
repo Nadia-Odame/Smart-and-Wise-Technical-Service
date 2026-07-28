@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import { Inbox, Image, LogOut, Settings, ShoppingBag, Wrench, ExternalLink } from "lucide-react";
+import { Inbox, Image, LogOut, Settings, ShieldCheck, ShoppingBag, Wrench, ExternalLink } from "lucide-react";
 import { supabase } from "@/lib/supabaseClient";
 import {
   Sidebar,
@@ -22,6 +22,7 @@ const navItems = [
   { to: "/admin/gallery", label: "Gallery", icon: Image },
   { to: "/admin/services", label: "Services", icon: Wrench },
   { to: "/admin/settings", label: "Settings", icon: Settings },
+  { to: "/admin/security", label: "Security", icon: ShieldCheck },
 ];
 
 const AdminLayout = () => {
