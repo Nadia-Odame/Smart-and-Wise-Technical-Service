@@ -62,7 +62,7 @@ hours himself.
 6. **Seed the database** so it starts out matching the current static site (uploads the
    existing placeholder photos, inserts the current services/products/business info):
    ```sh
-   node --env-file=.env scripts/seed-supabase.mjs
+   npm run seed
    ```
 7. **Deploying?** Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` as environment
    variables on your host (Vercel/Netlify) *before* the first deploy — Vite bakes them in at
