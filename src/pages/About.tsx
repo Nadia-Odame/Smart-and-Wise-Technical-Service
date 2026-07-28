@@ -2,8 +2,8 @@ import { Link } from "react-router-dom";
 import { CheckCircle2, Phone } from "lucide-react";
 import { Layout } from "@/components/Layout";
 import { useBusinessSettings } from "@/hooks/useBusinessSettings";
-import heroImage from "@/assets/hero-generator.jpg";
-import repairImage from "@/assets/gallery-repair.jpg";
+import heroImage from "@/assets/img3.webp";
+import repairImage from "@/assets/img1.webp";
 
 const values = [
   {
