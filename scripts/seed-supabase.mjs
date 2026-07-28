@@ -400,5 +400,7 @@ async function main() {
 
 main().catch((error) => {
   console.error("\nSeed failed:", error.message);
+  if (error.cause) console.error("Cause:", error.cause);
+  console.error("This script is safe to re-run — it upserts, so retrying won't duplicate anything.");
   process.exit(1);
 });
