@@ -319,7 +319,18 @@ async function seedCollectionsAndProducts(imageUrls) {
     },
   ];
 
-  const { error: productsError } = await supabase.from("products").upsert(products, { onConflict: "id" });
+  // PostgREST's batch upsert unions the keys across all rows in the call; a row
+  // that omits a boolean flag another row sets gets NULL for it, not the
+  // column's DEFAULT — so both NOT NULL flags need an explicit value on every row.
+  const productsToInsert = products.map((p) => ({
+    featured: false,
+    is_new: false,
+    ...p,
+  }));
+
+  const { error: productsError } = await supabase
+    .from("products")
+    .upsert(productsToInsert, { onConflict: "id" });
   if (productsError) throw new Error(`products seed failed: ${productsError.message}`);
 
   return { collections: collections.length, products: products.length };
