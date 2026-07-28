@@ -5,6 +5,8 @@ import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { LogIn } from "lucide-react";
 import { supabase } from "@/lib/supabaseClient";
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
+import { useMfaStatus } from "@/hooks/useMfaStatus";
+import { getAal } from "@/lib/api/mfa";
 import { loginSchema, LoginFormValues } from "@/lib/validation/loginSchema";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,6 +23,7 @@ const AdminLogin = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { session, loading: sessionLoading } = useSupabaseAuth();
+  const { data: mfaStatus, isLoading: mfaLoading } = useMfaStatus(!!session);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   const form = useForm<LoginFormValues>({
@@ -28,10 +31,16 @@ const AdminLogin = () => {
     defaultValues: { email: "", password: "" },
   });
 
-  if (!sessionLoading && session) {
+  if (!sessionLoading && !mfaLoading && session) {
     const redirectTo =
       (location.state as { from?: { pathname: string } } | null)?.from?.pathname ??
       "/admin/enquiries";
+    const needsChallenge = mfaStatus?.nextLevel === "aal2" && mfaStatus?.currentLevel !== "aal2";
+    if (needsChallenge) {
+      return (
+        <Navigate to="/admin/mfa-challenge" replace state={{ from: { pathname: redirectTo } }} />
+      );
+    }
     return <Navigate to={redirectTo} replace />;
   }
 
@@ -45,7 +54,20 @@ const AdminLogin = () => {
       setSubmitError("That email or password isn't right. Try again.");
       return;
     }
-    navigate("/admin/enquiries", { replace: true });
+
+    const redirectTo =
+      (location.state as { from?: { pathname: string } } | null)?.from?.pathname ??
+      "/admin/enquiries";
+
+    // Read AAL fresh here instead of trusting useMfaStatus's cache — its query
+    // was disabled/stale while session was still null, so it hasn't refetched
+    // in this same tick and branching on it right after login would be a race.
+    const { currentLevel, nextLevel } = await getAal();
+    if (nextLevel === "aal2" && currentLevel !== "aal2") {
+      navigate("/admin/mfa-challenge", { replace: true, state: { from: { pathname: redirectTo } } });
+      return;
+    }
+    navigate(redirectTo, { replace: true });
   };
 
   return (
