@@ -21,7 +21,6 @@ const ProductDetail = () => {
   const { data: collections = [] } = useCollections();
   const { data: products = [] } = useProducts();
   const [quantity, setQuantity] = useState(1);
-  const [activeImage, setActiveImage] = useState(0);
   const addItem = useCart((s) => s.addItem);
 
   if (!product) return <NotFound />;
@@ -51,29 +50,7 @@ const ProductDetail = () => {
 
         <div className="mt-6 grid gap-10 lg:grid-cols-2">
           <div>
-            <div className="border border-border aspect-[4/3] bg-muted">
-              <img
-                src={product.images[activeImage]}
-                alt={product.name}
-                className="w-full h-full object-cover"
-              />
-            </div>
-            {product.images.length > 1 && (
-              <div className="mt-3 flex gap-3">
-                {product.images.map((image, i) => (
-                  <button
-                    key={image + i}
-                    onClick={() => setActiveImage(i)}
-                    className={`w-20 h-20 border-2 ${
-                      i === activeImage ? "border-primary" : "border-border"
-                    }`}
-                    aria-label={`View image ${i + 1}`}
-                  >
-                    <img src={image} alt="" className="w-full h-full object-cover" />
-                  </button>
-                ))}
-              </div>
-            )}
+            <div className="border border-border aspect-[4/3] bg-muted" />
           </div>
 
           <div>

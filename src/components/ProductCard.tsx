@@ -27,14 +27,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
   return (
     <article className="group border border-border bg-card flex flex-col hover-lift">
-      <Link to={`/product/${product.slug}`} className="block image-reveal aspect-[4/3] bg-muted">
-        <img
-          src={product.images[0]}
-          alt={product.name}
-          loading="lazy"
-          className="w-full h-full object-cover"
-        />
-      </Link>
+      <Link to={`/product/${product.slug}`} className="block image-reveal aspect-[4/3] bg-muted" />
 
       <div className="p-5 flex flex-col flex-1">
         {collection && (
