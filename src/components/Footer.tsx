@@ -78,9 +78,16 @@ export const Footer = () => {
                 {business.phone}
               </a>
             </li>
-            <li className="flex items-start gap-2.5">
-              <MapPin className="w-4 h-4 mt-0.5 text-primary shrink-0" aria-hidden="true" />
-              {business.address}
+            <li>
+              <a
+                href={`https://www.google.com/maps?q=${business.mapQuery}`}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-start gap-2.5 hover:text-background"
+              >
+                <MapPin className="w-4 h-4 mt-0.5 text-primary shrink-0" aria-hidden="true" />
+                {business.address}
+              </a>
             </li>
             <li className="flex items-start gap-2.5">
               <Clock className="w-4 h-4 mt-0.5 text-primary shrink-0" aria-hidden="true" />
