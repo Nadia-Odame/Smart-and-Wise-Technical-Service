@@ -100,7 +100,7 @@ const AdminVerifyEmail = () => {
         <Mail className="w-6 h-6 text-primary" aria-hidden="true" />
         <h1 className="mt-2 font-serif text-3xl font-bold">Enter your code</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          We emailed a 6-digit code to <span className="font-semibold">{pendingEmail}</span>.
+          We emailed an 8-digit code to <span className="font-semibold">{pendingEmail}</span>.
           Enter it below.
         </p>
 
@@ -113,9 +113,9 @@ const AdminVerifyEmail = () => {
                 <FormItem>
                   <FormLabel>Code</FormLabel>
                   <FormControl>
-                    <InputOTP maxLength={6} value={field.value} onChange={field.onChange}>
+                    <InputOTP maxLength={8} value={field.value} onChange={field.onChange}>
                       <InputOTPGroup>
-                        {Array.from({ length: 6 }).map((_, i) => (
+                        {Array.from({ length: 8 }).map((_, i) => (
                           <InputOTPSlot key={i} index={i} />
                         ))}
                       </InputOTPGroup>

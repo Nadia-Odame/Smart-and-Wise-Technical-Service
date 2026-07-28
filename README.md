@@ -76,7 +76,7 @@ Once that's done, log in at `/admin` with the account from step 5.
 ## Two-step login verification (email code)
 
 Every admin login requires a second step, always — not opt-in. After the password check
-succeeds, that session is immediately dropped and Supabase emails a 6-digit code to the
+succeeds, that session is immediately dropped and Supabase emails an 8-digit code to the
 admin's address; only entering that code on the "Enter your code" screen creates the real
 session. No authenticator app needed, no extra service — this uses only Supabase's built-in
 email-OTP support (`signInWithOtp`/`verifyOtp`).
