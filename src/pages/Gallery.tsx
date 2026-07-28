@@ -1,4 +1,4 @@
-import { Camera, Phone } from "lucide-react";
+import { Phone } from "lucide-react";
 import { Layout } from "@/components/Layout";
 import { useBusinessSettings } from "@/hooks/useBusinessSettings";
 import { useGalleryPhotos } from "@/hooks/useGalleryPhotos";
@@ -38,17 +38,6 @@ const Gallery = () => {
                 {photo.caption}
               </figcaption>
             </figure>
-          ))}
-
-          {/* Placeholder slots so the grid still reads well */}
-          {[1, 2].map((n) => (
-            <div
-              key={n}
-              className="aspect-[4/3] border-2 border-dashed border-border flex flex-col items-center justify-center text-muted-foreground gap-2"
-            >
-              <Camera className="w-8 h-8" aria-hidden="true" />
-              <p className="text-xs font-bold tracking-[0.15em] uppercase">More photos coming</p>
-            </div>
           ))}
         </div>
       </section>
