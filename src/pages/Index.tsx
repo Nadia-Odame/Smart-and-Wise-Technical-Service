@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, CheckCircle2, Clock, MapPin, Phone, Wrench } from "lucide-react";
 import { Layout } from "@/components/Layout";
@@ -5,8 +6,8 @@ import { ProductCard } from "@/components/ProductCard";
 import { useBusinessSettings } from "@/hooks/useBusinessSettings";
 import { useServices } from "@/hooks/useServices";
 import { useProducts } from "@/hooks/useProducts";
+import { useGalleryPhotos } from "@/hooks/useGalleryPhotos";
 import { filterFeaturedProducts } from "@/lib/products-helpers";
-import heroImage from "@/assets/hero-generator.jpg";
 
 const reasons = [
   "We come to you — home, shop, office or site",
@@ -15,23 +16,39 @@ const reasons = [
   "Open every day until 8pm, including emergencies",
 ];
 
+const HERO_SLIDE_MS = 5000;
+
 const Index = () => {
   const { data: business } = useBusinessSettings();
   const { data: services = [] } = useServices();
   const { data: products = [] } = useProducts();
+  const { data: heroPhotos = [] } = useGalleryPhotos();
   const featured = filterFeaturedProducts(products);
+  const [activeSlide, setActiveSlide] = useState(0);
+
+  useEffect(() => {
+    if (heroPhotos.length <= 1) return;
+    const id = setInterval(
+      () => setActiveSlide((i) => (i + 1) % heroPhotos.length),
+      HERO_SLIDE_MS
+    );
+    return () => clearInterval(id);
+  }, [heroPhotos.length]);
 
   return (
     <Layout>
       {/* Hero */}
       <section className="relative bg-foreground text-background">
-        <img
-          src={heroImage}
-          alt="Technician servicing a diesel generator"
-          width={1600}
-          height={1000}
-          className="absolute inset-0 w-full h-full object-cover opacity-40"
-        />
+        {heroPhotos.map((photo, i) => (
+          <img
+            key={photo.id}
+            src={photo.src}
+            alt={photo.alt}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${
+              i === activeSlide ? "opacity-40" : "opacity-0"
+            }`}
+          />
+        ))}
         <div className="relative container-full py-20 sm:py-28 lg:py-36">
           <p className="section-label text-primary">
             <span className="w-8 h-0.5 bg-primary inline-block" aria-hidden="true" />
