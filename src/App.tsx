@@ -21,6 +21,7 @@ import RequireAuth from "./components/admin/RequireAuth";
 const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
 const AdminLayout = lazy(() => import("./pages/admin/AdminLayout"));
 const AdminEnquiries = lazy(() => import("./pages/admin/AdminEnquiries"));
+const AdminCareers = lazy(() => import("./pages/admin/AdminCareers"));
 const AdminShop = lazy(() => import("./pages/admin/AdminShop"));
 const AdminProductForm = lazy(() => import("./pages/admin/AdminProductForm"));
 const AdminGallery = lazy(() => import("./pages/admin/AdminGallery"));
@@ -86,6 +87,14 @@ const App = () => (
                 element={
                   <Suspense fallback={<AdminFallback />}>
                     <AdminEnquiries />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="careers"
+                element={
+                  <Suspense fallback={<AdminFallback />}>
+                    <AdminCareers />
                   </Suspense>
                 }
               />
