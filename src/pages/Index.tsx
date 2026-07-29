@@ -85,15 +85,13 @@ const Index = () => {
               <Clock className="w-4 h-4 text-primary" aria-hidden="true" />
               {business.hours}
             </span>
-            <a
-              href={`https://www.google.com/maps?q=${business.mapQuery}`}
-              target="_blank"
-              rel="noreferrer"
+            <Link
+              to="/contact"
               className="flex items-center gap-2 hover:text-background transition-colors"
             >
               <MapPin className="w-4 h-4 text-primary" aria-hidden="true" />
               {business.address}
-            </a>
+            </Link>
           </div>
         </div>
       </section>
