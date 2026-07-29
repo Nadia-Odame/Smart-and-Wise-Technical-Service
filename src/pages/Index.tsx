@@ -130,12 +130,13 @@ const Index = () => {
           <div>
             <p className="section-label text-primary">Local and reliable</p>
             <h2 className="mt-3 font-serif text-3xl sm:text-4xl font-bold">
-              A working generator company, not a call centre
+              Powering Homes and Businesses with Reliable Generator Solutions
             </h2>
             <p className="mt-4 text-background/75 leading-relaxed">
-              We are a small team based in Owulabu. The person who picks up the phone is the
-              person who comes to look at your machine. We keep our prices plain and we tell you
-              when a repair is not worth the money.
+              Smart & Wise Technical Service Limited is a trusted generator company in Ghana 
+              specializing in generator servicing, repairs, electrical works, and engine overhauling.
+              We help homes, businesses, and industries maintain reliable power through expert 
+              technical solutions.
             </p>
             <ul className="mt-6 space-y-3">
               {reasons.map((r) => (

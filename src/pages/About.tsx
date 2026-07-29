@@ -30,8 +30,8 @@ const About = () => {
           <p className="section-label text-primary">Who we are</p>
           <h1 className="mt-3 font-serif text-4xl sm:text-6xl font-bold">About Us</h1>
           <p className="mt-4 max-w-2xl text-background/75 leading-relaxed">
-            {business.name} — serving Owulabu and the surrounding communities with reliable
-            generator solutions.
+            {business.name} is a Ghanaian generator and electrical service company dedicated to 
+            providing reliable power solutions for homes, businesses, and organizations.
           </p>
         </div>
       </section>
@@ -51,17 +51,22 @@ const About = () => {
           </h2>
           <div className="mt-5 space-y-4 text-muted-foreground leading-relaxed">
             <p>
-              Serving Owulabu for years with reliable generator solutions. What started as one
-              technician with a toolbox has grown into a small team that homes, shops, churches
-              and businesses around the area call when their power lets them down.
+              Founded with a passion for solving power challenges, Smart & Wise Technical Service
+              Limited has grown into a trusted technical partner for customers who depend on 
+              reliable electricity. Over the years, we have built our reputation through quality 
+              workmanship, professional service, and a commitment to keeping our clients' power 
+              systems running efficiently.
             </p>
             <p>
-              We service and repair generators of all sizes, handle the electrical work around
-              them, and overhaul engines that others would write off. We also sell and rent out
-              sets, so if what you need is a machine rather than a repair, we can sort that too.
+              Our experienced technicians handle generator maintenance, troubleshooting, repairs, 
+              and complete engine overhauls for different types and sizes of generators. 
+              Beyond repairs, we also provide electrical services and support customers who 
+              require generator solutions for their homes, shops, churches, and businesses.
             </p>
-            <p className="text-sm italic">
-              (Placeholder history — swap in the real story and dates when you are ready.)
+            <p>
+              At Smart & Wise, we understand that power interruptions can affect daily operations. 
+              That is why we focus on delivering dependable solutions that reduce downtime and give 
+              our customers confidence in their power systems.
             </p>
           </div>
         </div>
@@ -88,7 +93,9 @@ const About = () => {
             Where to find us
           </h2>
           <p className="mt-4 text-muted-foreground leading-relaxed">
-            We are based at {business.address}, and we travel out to customers across the area.
+            Based at {business.address}, we proudly serve clients across the country. 
+            We are committed to delivering dependable service, building lasting relationships, 
+            and providing solutions that our customers can trust.
             {" "}
             {business.hours}.
           </p>

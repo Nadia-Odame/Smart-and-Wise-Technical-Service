@@ -5,7 +5,7 @@ export const business = {
   phone: "+233 24 409 3842",
   phoneHref: "tel:+233244093842",
   whatsapp: "https://wa.me/233244093842",
-  address: "HGXG+8J9, Owulabu, Ghana",
+  address: "Owulabu, Ghana",
   hours: "Open daily · Closes 8:00 pm",
   mapQuery: "HGXG%2B8J9%2C+Owulabu%2C+Ghana",
 };
