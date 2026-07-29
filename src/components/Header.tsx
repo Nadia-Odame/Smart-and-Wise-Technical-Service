@@ -11,6 +11,7 @@ const navItems = [
   { to: "/shop", label: "Shop & Rentals" },
   { to: "/gallery", label: "Gallery" },
   { to: "/about", label: "About" },
+  { to: "/careers", label: "Careers" },
   { to: "/contact", label: "Contact" },
 ];
 

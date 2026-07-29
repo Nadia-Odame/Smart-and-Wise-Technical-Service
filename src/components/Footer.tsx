@@ -55,6 +55,7 @@ export const Footer = () => {
               { to: "/", label: "Home" },
               { to: "/about", label: "About" },
               { to: "/gallery", label: "Gallery" },
+              { to: "/careers", label: "Careers" },
               { to: "/contact", label: "Contact" },
               { to: "/cart", label: "Your Order" },
             ].map((l) => (
