@@ -135,7 +135,7 @@ const Careers = () => {
                   <FormItem>
                     <FormLabel>Full name *</FormLabel>
                     <FormControl>
-                      <Input {...field} className="rounded-none h-12" />
+                      <Input {...field} placeholder="e.g. Kwame Mensah" className="rounded-none h-12" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -150,7 +150,12 @@ const Careers = () => {
                     <FormItem>
                       <FormLabel>Email *</FormLabel>
                       <FormControl>
-                        <Input type="email" {...field} className="rounded-none h-12" />
+                        <Input
+                          type="email"
+                          {...field}
+                          placeholder="e.g. kwame@example.com"
+                          className="rounded-none h-12"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -163,7 +168,12 @@ const Careers = () => {
                     <FormItem>
                       <FormLabel>Phone number *</FormLabel>
                       <FormControl>
-                        <Input type="tel" {...field} className="rounded-none h-12" />
+                        <Input
+                          type="tel"
+                          {...field}
+                          placeholder="e.g. 024 000 0000"
+                          className="rounded-none h-12"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
