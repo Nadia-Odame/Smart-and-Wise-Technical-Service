@@ -7,16 +7,32 @@ import repairImage from "@/assets/img1.webp";
 
 const values = [
   {
-    title: "Honest pricing",
-    body: "You hear the cost before we open anything. If a repair is not worth it, we say so.",
+    title: "Integrity",
+    body: "We conduct our business with honesty, transparency, and accountability, building trust through every service we provide.",
   },
   {
-    title: "Proper workmanship",
-    body: "Right parts, right torque, tested before we leave. We stand behind the work we do.",
+    title: "Excellence",
+    body: "We are committed to delivering high-quality workmanship and technical solutions that consistently exceed customer expectations.",
   },
   {
-    title: "We answer the phone",
-    body: "Open every day until 8pm. A generator problem does not wait for Monday morning.",
+    title: "Reliability",
+    body: "Our customers depend on us to keep their power systems running, and we take that responsibility seriously by delivering dependable services they can count on.",
+  },
+  {
+    title: "Customer Commitment",
+    body: "We put our customers first by understanding their needs, responding promptly, and providing personalized solutions with exceptional service.",
+  },
+  {
+    title: "Innovation",
+    body: "We embrace continuous learning, modern technology, and improved practices to provide efficient and effective power solutions.",
+  },
+  {
+    title: "Safety",
+    body: "Safety is at the heart of everything we do. We follow industry best practices to protect our team, our customers, and every project we undertake.",
+  },
+  {
+    title: "Professionalism",
+    body: "We uphold the highest standards of professionalism through respect, technical expertise, and a commitment to delivering every project with care and precision.",
   },
 ];
 
@@ -73,9 +89,29 @@ const About = () => {
       </section>
 
       <section className="bg-muted py-14 sm:py-20">
+        <div className="container-full grid gap-10 lg:grid-cols-2">
+          <div className="border-l-4 border-primary pl-6">
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold">Our Mission</h2>
+            <p className="mt-4 text-muted-foreground leading-relaxed">
+              To deliver reliable power solutions through exceptional technical expertise,
+              quality workmanship, and customer-focused service, ensuring homes, businesses, and
+              industries can operate with confidence and uninterrupted productivity.
+            </p>
+          </div>
+          <div className="border-l-4 border-primary pl-6">
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold">Our Vision</h2>
+            <p className="mt-4 text-muted-foreground leading-relaxed">
+              To become the most trusted name in generator and technical services across Ghana
+              by setting the standard for quality, reliability, and customer satisfaction.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-14 sm:py-20">
         <div className="container-full">
-          <h2 className="font-serif text-3xl sm:text-4xl font-bold">How we work</h2>
-          <div className="mt-8 grid gap-5 sm:grid-cols-3">
+          <h2 className="font-serif text-3xl sm:text-4xl font-bold">Our Core Values</h2>
+          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {values.map((v) => (
               <div key={v.title} className="bg-card border border-border border-t-4 border-t-primary p-6">
                 <CheckCircle2 className="w-7 h-7 text-primary" aria-hidden="true" />
