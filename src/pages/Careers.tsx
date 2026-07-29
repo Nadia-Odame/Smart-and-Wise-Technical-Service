@@ -87,8 +87,10 @@ const Careers = () => {
           <p className="section-label text-primary">Join our team</p>
           <h1 className="mt-3 font-serif text-4xl sm:text-6xl font-bold">Careers</h1>
           <p className="mt-4 max-w-2xl text-background/75 leading-relaxed">
-            We're always looking for reliable people who want to learn a trade and build a
-            career in generator servicing, repairs, and electrical work.
+            We're always looking for skilled, motivated, and dedicated individuals to join 
+            Smart & Wise Technical Service Limited. If you're passionate about delivering 
+            quality technical services and growing your career in the power solutions industry, 
+            we'd love to hear from you.
           </p>
         </div>
       </section>
